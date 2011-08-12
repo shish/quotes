@@ -1,0 +1,51 @@
+<%def name="body(title, heading, nav, body, description='More UKC Quotes')">
+<!doctype html>
+<html xmlns:fb="http://www.facebook.com/2008/fbml">
+	<head>
+			<meta charset="utf-8">
+			<title>${title}</title>
+			<link rel="stylesheet" href="/static/style.css">
+			<script language="javascript" src="/static/script.js"></script>
+			<meta name="description" content="${description}">
+	</head>
+	<body>
+			<div id="header">
+				<h1><a href="/">Quotes</a> - ${heading}</h1>
+			</div>
+			<div id="body">
+				<div id="nav">
+					${nav|n}
+				</div>
+				${body|n}
+
+<h3>Quick Submit</h3>
+<form action="/quotes" method="POST">
+	<table width="500">
+		<tr>
+			<td colspan="2"><textarea name="text" rows="5"></textarea></td>
+		</tr>
+		<tr>
+			<td>Tags:</td>
+			<td><input type="text" name="tags" placeholder="Separated by spaces"></td>
+		</tr>
+		<tr>
+			<td colspan="2"><input type="submit" value="Submit"></td>
+		</tr>
+	</table>
+</form>
+
+			</div>
+			<div id="footer">
+				Quotes software by Shish, quotes by people
+			</div>
+	</body>
+<script type="text/javascript">
+var addthis_config = {
+	services_compact:  'facebook, twitter, more',
+	services_expanded: 'facebook, twitter, more',
+	services_exclude:  'print'
+}
+</script>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4e3d2e800eb80f09"></script>
+</html>
+</%def>

@@ -1,0 +1,40 @@
+<%def name="body(quote, urlquote, htmlquote)">
+<div class="quote">
+	<div class="text">
+		<%
+		text = quote.text
+		sig = None
+		if "\n        -- " in text:
+			sig = text[text.find("\n        -- ")+12:]
+			text = text[:text.find("\n        -- ")]
+		%>
+		% for line in text.split("\n"):
+			<br><tt>${line}</tt>
+		% endfor
+		% if sig:
+			<p><tt style="padding-left: 4em;">-- <i>${sig}</i></tt>
+		% endif
+	</div>
+	<div class="info">
+<!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_default_style" style="float: right;"
+	addthis:url="http://quotes.shishnet.org/quotes/${quote.id}"
+	addthis:title="UKC Quote ${quote.id}"
+	addthis:description="${quote.text.split("\n")[0]}">
+<a class="addthis_button_facebook"></a>
+<a class="addthis_button_twitter"></a>
+<a class="addthis_button_preferred_1"></a>
+<a class="addthis_button_preferred_2"></a>
+<span class="addthis_separator">|</span>
+<a href="http://www.addthis.com/bookmark.php?v=250&pubid=ra-4e3d2e800eb80f09" class="addthis_button_compact"></a>
+</div>
+<!-- AddThis Button END -->
+		<a href="/quotes/${quote.id}">#${quote.id}</a>
+		Posted under
+		% for tag in list(quote.tags):
+			<a href="/quotes?search=${urlquote(tag.name)|n}&page=1">${htmlquote(tag.name)|n}</a>
+		% endfor
+		on ${quote.date.strftime("%Y-%m-%d %H:%M")}
+	</div>
+</div>
+</%def>
