@@ -2,4 +2,5 @@
 
 exec 2>&1
 ulimit -v 512000
-exec /home/shish/bin/spawn-fcgi -n -s /tmp/fcgi-quotes.sock -u shish -U www-data -d /home/shish/quotes.shishnet.org/htdocs -- ../app/quotes.py fastcgi
+export REAL_SCRIPT_NAME=""
+exec spawn-fcgi -n -s /tmp/fcgi-quotes.sock -u shish -U www-data -d /home/shish/quotes.shishnet.org/htdocs -- ../app/quotes.py fastcgi

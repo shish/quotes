@@ -10,7 +10,7 @@ from sqlalchemy.orm import relationship, backref
 
 import ConfigParser
 config = ConfigParser.SafeConfigParser()
-config.read("../config.cfg")
+config.read("../app/quotes.cfg")
 host = config.get("database", "hostname")
 user = config.get("database", "username")
 password = config.get("database", "password")

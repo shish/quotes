@@ -64,8 +64,10 @@ render = render_mako(
 app = web.application(urls, globals())
 app.add_processor(load_sqla)
 app.add_processor(override_method)
+
+import rediswebpy
 session = web.session.Session(
-    app, web.session.DiskStore('../sessions/'),
+    app, rediswebpy.RedisStore(prefix='session:quotes:'),
     initializer={'username': None})
 
 
