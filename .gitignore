@@ -1,0 +1,4 @@
+*.pyc
+*.cfg
+logs/
+venv/

@@ -1,6 +1,5 @@
 #!/bin/sh
-
-exec 2>&1
 ulimit -v 512000
-export REAL_SCRIPT_NAME=""
-exec spawn-fcgi -n -s /tmp/fcgi-quotes.sock -u shish -U www-data -d /home/shish/quotes.shishnet.org/htdocs -- ../app/quotes.py fastcgi
+cd /data/sites/quotes.shishnet.org/htdocs
+sleep 3 && sd_watcher --url http://127.0.0.1:8802/ --interval 30 --exit &
+exec chpst -u shish:www-data ../venv/bin/python ../app/quotes.py 127.0.0.1:8802

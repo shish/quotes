@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import web
 web.config.debug = False
@@ -67,7 +67,7 @@ app.add_processor(override_method)
 
 import rediswebpy
 session = web.session.Session(
-    app, rediswebpy.RedisStore(prefix='session:quotes:'),
+    app, rediswebpy.RedisStore(),  # prefix='session:quotes:'),
     initializer={'username': None})
 
 
@@ -154,9 +154,13 @@ class quotes:
 
     @handle_exceptions
     def POST(self, id=None):
-        form = web.input(text="", tags="")
+        form = web.input(text="", tags="", cap="")
         all_tags = [get_tag(tag) for tag in form.tags.split(" ")]
         uni_tags = list(set(all_tags))
+        if "[url=" in form.text or "<a href=" in form.text or form.cap != "6":
+            log_info("Spam detected")
+            web.seeother(site+"/")
+            return
         quote = Quote(form.text, uni_tags)
         web.ctx.orm.add(quote)
         web.ctx.orm.commit()
@@ -187,8 +191,11 @@ class quote:
             form = web.input(text="", tags="")
             all_tags = [get_tag(tag) for tag in form.tags.split(" ")]
             uni_tags = list(set(all_tags))
-            quote.text = form.text
-            quote.tags = uni_tags
+            if form.text:
+                quote.text = form.text
+                quote.tags = uni_tags
+            else:
+                web.ctx.orm.delete(quote)
             web.ctx.orm.commit()
             log_info("updated Quote #%d" % quote.id)
         web.seeother(site+"/")

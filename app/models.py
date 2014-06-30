@@ -1,6 +1,5 @@
 
 import hashlib
-import Image
 import StringIO
 
 from sqlalchemy import create_engine, func
@@ -62,8 +61,8 @@ class Quote(Base):
     tags = relationship(
         "Tag",
         secondary=map_ttq,
-        backref=backref("quotes"),
-        order_by=["tag.name", ]
+        backref=backref("quotes")
+        #order_by=["Tag.name", ]
     )
 
     def __init__(self, text, tags=[]):
