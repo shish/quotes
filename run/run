@@ -1,5 +1,0 @@
-#!/bin/sh
-ulimit -v 512000
-cd /data/sites/quotes.shishnet.org/htdocs
-sleep 3 && sd_watcher --url http://127.0.0.1:8802/ --interval 30 --exit &
-exec chpst -u shish:www-data ../venv/bin/python ../app/quotes.py 127.0.0.1:8802
