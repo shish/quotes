@@ -56,7 +56,7 @@ class render_mako:
         return t.render_unicode
 
 render = render_mako(
-    directories=["../templates/"],
+    directories=["./templates/"],
     input_encoding='utf-8',
     output_encoding='utf-8',
     default_filters=['unicode', 'h'],
