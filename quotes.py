@@ -65,10 +65,22 @@ app = web.application(urls, globals())
 app.add_processor(load_sqla)
 app.add_processor(override_method)
 
-import rediswebpy
+import os, urlparse
+db_info = urlparse.urlparse(os.environ['DB_DSN'])
 session = web.session.Session(
-    app, rediswebpy.RedisStore(),  # prefix='session:quotes:'),
-    initializer={'username': None})
+    app,
+    web.session.DBStore(
+        web.database(
+            dbn=db_info.scheme,
+            host=db_info.hostname,
+            port=db_info.port,
+            db=db_info.path.strip("/"),
+            user=db_info.username,
+            pw=db_info.password),
+        'sessions'
+    ),
+    initializer={'username': None}
+)
 
 
 # {{{ utility functions
@@ -236,14 +248,9 @@ class users:
 
 if __name__ == "__main__":
     logging.basicConfig(
-            level=logging.DEBUG,
-            format='%(asctime)s %(levelname)-8s %(message)s',
-            filename="../logs/app.log")
-    smtp = logging.handlers.SMTPHandler(
-            "localhost", "noreply@shishnet.org",
-            ["shish+quotes@shishnet.org", ], "quotes error report")
-    smtp.setLevel(logging.WARNING)
-    logging.getLogger('').addHandler(smtp)
-
+        level=logging.DEBUG,
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        #filename="../logs/app.log",
+    )
     logging.info("App starts...")
     app.run()
