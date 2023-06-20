@@ -1,8 +1,6 @@
 {% macro quote_block(quote) %}
 	<div class="quote">
-		<div class="text">
-			<tt>{{ quote.text }}</tt>
-		</div>
+		<pre class="text">{{ quote.text }}</pre>
 		<div class="info">
 			<a href="/quote/{{ quote.id }}">#{{ quote.id }}</a>
 			Posted under
