@@ -1,0 +1,22 @@
+{% extends "_standard.html" %}
+
+{% block body %}
+	{% if edit: %}
+		<form action="/quote/{{ quote.id }}" method="POST">
+			<table width="500">
+				<tr>
+					<td colspan="2"><textarea name="text" rows="5">{{ quote.text }}</textarea></td>
+				</tr>
+				<tr>
+					<td>Tags:</td>
+					<td><input type="text" name="tags" value="{{ quote.tag_str }}"></td>
+				</tr>
+				<tr>
+					<td colspan="2"><input type="submit" value="Update"></td>
+				</tr>
+			</table>
+		</form>
+	{% else: %}
+		{{ quote_block(quote) }}
+	{% endif %}
+{% endblock %}

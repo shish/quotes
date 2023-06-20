@@ -1,0 +1,28 @@
+{% extends "_standard.html" %}
+
+{% block body %}
+	{% for quote in quotes %}
+		{{ quote_block(quote) }}
+		<hr>
+	{% endfor %}
+
+	<h3>Quick Submit</h3>
+	<form action="/quotes" method="POST">
+		<table width="500">
+			<tr>
+				<td colspan="2"><textarea name="text" rows="5"></textarea></td>
+			</tr>
+			<tr>
+				<td>Tags:</td>
+				<td><input type="text" name="tags" placeholder="Separated by spaces" autocomplete="off"></td>
+			</tr>
+			<tr>
+				<td>2 + 4:</td>
+				<td><input type="text" name="captcha" placeholder="" autocomplete="off"></td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" value="Submit"></td>
+			</tr>
+		</table>
+	</form>
+{% endblock %}

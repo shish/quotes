@@ -1,17 +1,17 @@
 BODY {background: #DDD; margin: 0px}
 
-#header, #footer {
+HEADER, FOOTER {
 	text-align: center;
 	clear: both;
 	padding: 16px;
 }
-#body {
+ARTICLE {
 	background: #EEE;
 	border-top: 1px solid black;
 	border-bottom: 1px solid black;
 	padding: 32px;
 }
-#nav {
+NAV {
 	padding: 8px;
 	background: #EEE;
 	float: right;
@@ -21,7 +21,7 @@ BODY {background: #DDD; margin: 0px}
 	text-align: center;
 	border: 1px solid #CCC;
 }
-#footer {
+FOOTER {
 	font-size: 0.75em;
 }
 
@@ -32,7 +32,7 @@ H3 {margin-bottom: 4px;}
 .quote > .info {margin-top: 0.75em; font-style: italic;}
 .quote > .tags {font-size: 0.75em;}
 
-#nav TABLE {
+NAV TABLE {
 	margin: auto;
 }
 TD INPUT, TD TEXTAREA {

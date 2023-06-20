@@ -1,0 +1,60 @@
+{% macro quote_block(quote) %}
+	<div class="quote">
+		<div class="text">
+			<tt>{{ quote.text }}</tt>
+		</div>
+		<div class="info">
+			<a href="/quote/{{ quote.id }}">#{{ quote.id }}</a>
+			Posted under
+			{% for tag in quote.tags: %}
+				<a href="/quotes?search={{ tag.name }}">{{ tag.name }}</a>
+			{% endfor %}
+			on {{ quote.date.strftime("%Y-%m-%d %H:%M") }}
+		</div>
+	</div>
+{% endmacro %}<html>
+	<head>
+			<meta charset="utf-8">
+			<title>{{ title }}</title>
+			<link rel="stylesheet" href="/static/style.css">
+			<meta name="description" content="{{ description }}">
+	</head>
+	<body>
+			<header>
+				<h1><a href="/">Quotes</a> - {{ title }}</h1>
+			</header>
+			<article>
+				{% if page or tag_cloud: %}
+				<nav>
+					<h3>Navigation</h3>
+					{% if page: %}
+						<a href="/quotes?search={{ search }}&page={{ page-1 }}">&lt;&lt;</a>
+						Page {{ page }}
+						<a href="/quotes?search={{ search }}&page={{ page+1 }}">&gt;&gt;</a>
+						<h3>Search</h3>
+						<form action="/quotes" method="GET">
+							<table>
+								<tr>
+									<td><input type="text" name="search" value="{{ search }}"></td>
+									<td><input type="submit" value="Search"></td>
+								</tr>
+							</table>
+						</form>
+					{% endif %}
+
+					{% if tag_cloud: %}
+						<h3>Tag Cloud</h3>
+						{% for tag in tag_cloud: %}
+							<a href="/quotes?search={{ tag[1] }}" style="font-size: {{ tag[0] }}em">{{ tag[1] }}</a>
+						{% endfor %}
+					{% endif %}
+				</nav>
+				{% endif %}
+
+				{% block body %}No body specified :({% endblock %}
+			</article>
+			<footer>
+				<a href="https://github.com/shish/quotes">Quotes software</a> &copy; Shish 2023, quotes by people
+			</footer>
+	</body>
+</html>

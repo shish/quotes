@@ -1,0 +1,43 @@
+[project]
+name = "quotes2"
+version = "2.0.0"
+authors = [
+    {name = "Shish", email = "shish@shishnet.org"},
+]
+description = "Quote Database"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "flask",
+    "Flask-SQLAlchemy",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+]
+test = [
+    "mypy",
+    "pytest-cov ~=3.0.0",
+]
+
+[tool.setuptools]
+py-modules = ["quotes2"]
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-report term-missing --cov-fail-under 95"
+
+[tool.coverage.run]
+source = ["quotes2"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+extend-exclude = '''
+/(
+  | venv
+)/
+'''
+
+[tool.isort]
+profile = "black"

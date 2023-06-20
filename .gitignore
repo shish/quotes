@@ -2,3 +2,7 @@
 *.cfg
 logs/
 venv/
+data/
+*.egg-info
+__pycache__/
+.coverage
