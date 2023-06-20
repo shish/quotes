@@ -5,7 +5,7 @@
 			<a href="/quote/{{ quote.id }}">#{{ quote.id }}</a>
 			Posted under
 			{% for tag in quote.tags: %}
-				<a href="/quotes?search={{ tag.name }}">{{ tag.name }}</a>
+				<a href="/quotes?search={{ tag.name | urlencode }}">{{ tag.name }}</a>
 			{% endfor %}
 			on {{ quote.date.strftime("%Y-%m-%d %H:%M") }}
 		</div>
@@ -26,9 +26,9 @@
 				<nav>
 					<h3>Navigation</h3>
 					{% if page: %}
-						<a href="/quotes?search={{ search }}&page={{ page-1 }}">&lt;&lt;</a>
+						<a href="/quotes?search={{ search | urlencode }}&page={{ page-1 }}">&lt;&lt;</a>
 						Page {{ page }}
-						<a href="/quotes?search={{ search }}&page={{ page+1 }}">&gt;&gt;</a>
+						<a href="/quotes?search={{ search | urlencode }}&page={{ page+1 }}">&gt;&gt;</a>
 						<h3>Search</h3>
 						<form action="/quotes" method="GET">
 							<table>
@@ -43,7 +43,7 @@
 					{% if tag_cloud: %}
 						<h3>Tag Cloud</h3>
 						{% for tag in tag_cloud: %}
-							<a href="/quotes?search={{ tag[1] }}" style="font-size: {{ tag[0] }}em">{{ tag[1] }}</a>
+							<a href="/quotes?search={{ tag[1] | urlencode }}" style="font-size: {{ tag[0] }}em">{{ tag[1] }}</a>
 						{% endfor %}
 					{% endif %}
 				</nav>
