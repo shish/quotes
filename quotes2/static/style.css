@@ -28,7 +28,7 @@ FOOTER {
 H1 {margin-top: 0px; margin-bottom: 0px;}
 H3 {margin-bottom: 4px;}
 
-.quote > .text {}
+.quote > .text {white-space: pre-wrap;}
 .quote > .info {margin-top: 0.75em; font-style: italic;}
 
 NAV TABLE {
