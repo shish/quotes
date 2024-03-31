@@ -1,8 +1,14 @@
 from typing import List
+import datetime
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
-db = SQLAlchemy()
 
+class Base(DeclarativeBase):
+    pass
+
+
+db = SQLAlchemy(model_class=Base)
 
 map_ttq = db.Table(
     "map_tag_to_quote",
@@ -14,11 +20,13 @@ map_ttq = db.Table(
 class Quote(db.Model):  # type: ignore
     __tablename__ = "quote"
 
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.Unicode, nullable=False)
-    date = db.Column(db.DateTime, nullable=False, default=db.func.now())
+    id: Mapped[int] = mapped_column(primary_key=True)
+    text: Mapped[str] = mapped_column(nullable=False)
+    date: Mapped[datetime.datetime] = mapped_column(
+        nullable=False, default=db.func.now()
+    )
 
-    tags = db.relationship("Tag", secondary=map_ttq, backref=db.backref("quotes"))
+    tags: Mapped[List["Tag"]] = relationship(secondary=map_ttq, back_populates="quotes")
 
     def __init__(self, text: str, tags: List["Tag"] = []):
         self.text = text
@@ -32,8 +40,10 @@ class Quote(db.Model):  # type: ignore
 class Tag(db.Model):  # type: ignore
     __tablename__ = "tag"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Unicode, index=True, nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(index=True, nullable=False)
+
+    quotes: Mapped[List[Quote]] = relationship(secondary=map_ttq, back_populates="tags")
 
     def __init__(self, name: str):
         self.name = name
