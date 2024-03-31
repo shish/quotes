@@ -28,8 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: psf/black@stable
-        options: "--check --verbose --diff"
-        src: "./quotes2"
+        with:
+          options: "--check --verbose --diff"
+          src: "./quotes2"
 
   ruff:
     runs-on: ubuntu-latest
