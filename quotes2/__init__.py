@@ -42,6 +42,8 @@ def create_app(test_config=None):
     # Load config
 
     app = Flask(__name__, instance_path=os.path.abspath("./data"))
+    if not os.path.exists("./data"):
+        os.makedirs("./data")
     if not os.path.exists("./data/secret.txt"):
         with open("./data/secret.txt", "wb") as fp:
             fp.write(os.urandom(32))
