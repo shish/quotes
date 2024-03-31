@@ -1,14 +1,15 @@
 import os
 import click
 import math
+import datetime
 from typing import List, Tuple
 import sqlalchemy
 
+from werkzeug.wrappers.response import Response
 from flask import (
     Flask,
     render_template,
     session,
-    Response,
     redirect,
     url_for,
     request,
@@ -122,7 +123,11 @@ def create_app(test_config=None):
         """Create a new quote"""
         text = request.form["text"]
         tags = list(set(get_tag(tag) for tag in request.form["tags"].split()))
-        if "[url=" in text or "<a href=" in text or request.form["captcha"] != "6":
+        if (
+            "[url=" in text
+            or "<a href=" in text
+            or request.form["captcha"] != str(datetime.date.today().day)
+        ):
             abort(400, "Spam detected")
         quote = Quote(text, tags)
         db.session.add(quote)

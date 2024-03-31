@@ -1,4 +1,5 @@
 from flask.testing import FlaskClient
+import datetime
 
 
 def test_favicon(client: FlaskClient):
@@ -28,7 +29,7 @@ def test_quotes_get(client: FlaskClient):
 def test_quotes_post(client: FlaskClient):
     response = client.post(
         "/quotes",
-        data={"text": "test", "tags": "test tag", "captcha": "6"},
+        data={"text": "test", "tags": "test tag", "captcha": str(datetime.date.today().day)},
         content_type="multipart/form-data",
     )
     assert response.status_code == 302
