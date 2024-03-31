@@ -16,8 +16,6 @@ dependencies = [
 dev = [
     "black",
     "ruff",
-]
-test = [
     "mypy",
     "pytest-cov ~=3.0.0",
 ]
@@ -33,7 +31,7 @@ source = ["quotes2"]
 
 [tool.black]
 line-length = 88
-target-version = ['py38']
+target-version = ['py311']
 extend-exclude = '''
 /(
   | venv
@@ -42,3 +40,6 @@ extend-exclude = '''
 
 [tool.isort]
 profile = "black"
+
+[tool.mypy]
+files = "quotes2"
