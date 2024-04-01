@@ -1,21 +1,23 @@
-import os
-import click
-import math
 import datetime
+import math
+import os
 from typing import List, Tuple
-import sqlalchemy
 
-from werkzeug.wrappers.response import Response
+import click
+import sqlalchemy
 from flask import (
     Flask,
-    render_template,
-    redirect,
-    url_for,
-    request,
     abort,
+    redirect,
+    render_template,
+    request,
     send_from_directory,
+    url_for,
 )
-from .models import db, Quote, Tag
+from sqlalchemy import select, text
+from werkzeug.wrappers.response import Response
+
+from .models import Quote, Tag, db
 
 
 def get_tag(name: str) -> Tag:
@@ -25,16 +27,19 @@ def get_tag(name: str) -> Tag:
 
 def tag_cloud() -> List[Tuple[str, float]]:
     """Return a list of all tags and their logaritmic count."""
-    return db.session.execute(
-        db.text(
-            """
+    return [
+        (a, b)
+        for (a, b) in db.session.execute(
+            text(
+                """
                 SELECT greatest(0.1, log(count(quote_id))) AS tagcount, name
                 FROM map_tag_to_quote
                 JOIN tag ON map_tag_to_quote.tag_id=tag.id
                 GROUP BY name
                 """
-        )
-    ).all()
+            )
+        ).all()
+    ]
 
 
 def create_app(test_config=None):
@@ -98,17 +103,17 @@ def create_app(test_config=None):
         """Show a page of quotes, optionally filtered by search text and tags."""
         search = request.args.get("search", "")
         page = int(request.args.get("page", 1))
-        q = db.select(Quote)
+        q = select(Quote)
         if search:
             search_tag = (
-                db.session.execute(db.select(Tag).filter(Tag.name == search))
+                db.session.execute(select(Tag).where(Tag.name == search))
                 .scalars()
                 .first()
             )
             if search_tag:
-                q = q.join(Quote.tags).filter(Tag.id == search_tag.id)
+                q = q.join(Quote.tags).where(Tag.id == search_tag.id)
             else:
-                q = q.filter(Quote.text.contains(search))
+                q = q.where(Quote.text.contains(search))
         q = q.order_by(Quote.id.desc()).limit(10).offset((page - 1) * 10)
         quotes = db.session.execute(q).scalars().all()
         return render_template(
@@ -140,7 +145,7 @@ def create_app(test_config=None):
     @app.route("/quote/<id>", methods=["GET"])
     def quote_get(id: int) -> str:
         """Show a single quote"""
-        quote = db.first_or_404(db.select(Quote).filter(Quote.id == id))
+        quote = db.first_or_404(select(Quote).filter(Quote.id == id))
         return render_template(
             "quote.html",
             title="Quote #%d" % quote.id,
@@ -151,7 +156,7 @@ def create_app(test_config=None):
     @app.route("/quote/<id>", methods=["POST"])
     def quote_post(id: int) -> Response:
         """Update a single quote"""
-        quote = db.first_or_404(db.select(Quote).filter(Quote.id == id))
+        quote = db.first_or_404(select(Quote).where(Quote.id == id))
         if request.form["text"]:
             quote.text = request.form["text"]
             quote.tags = list(set(get_tag(tag) for tag in request.form["tags"].split()))

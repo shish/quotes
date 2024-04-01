@@ -1,5 +1,6 @@
-from typing import List
 import datetime
+from typing import List
+
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 

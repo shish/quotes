@@ -17,7 +17,7 @@ dev = [
     "black",
     "ruff",
     "mypy",
-    "pytest-cov ~=3.0.0",
+    "pytest-cov",
 ]
 
 [tool.setuptools]
