@@ -8,13 +8,10 @@ on:
 
 jobs:
   pytest:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@master
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -24,22 +21,19 @@ jobs:
           pytest
 
   black:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - uses: psf/black@stable
         with:
           options: "--check --diff"
           src: "./quotes2"
 
   ruff:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      - uses: actions/setup-python@v5
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -49,13 +43,10 @@ jobs:
           ruff check --output-format=github quotes2
 
   mypy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@master
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -65,14 +56,14 @@ jobs:
 
   publish:
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - pytest
       - black
       - ruff
       - mypy
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@main
         with:
