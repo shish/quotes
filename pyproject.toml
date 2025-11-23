@@ -12,7 +12,7 @@ dependencies = [
     "Flask-SQLAlchemy",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "black",
     "ruff",
