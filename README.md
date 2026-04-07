@@ -1,20 +1,17 @@
 Install:
 ```
-python3 -m venv .venv
-source .venv/bin/activate
-pip install --group dev -e .
-flask --app quotes2 init-db
+uv run flask --app quotes2 init-db
 ```
 
 Run:
 ```
-flask --app quotes2 --debug run
+uv run flask --app quotes2 --debug run
 ```
 
 Test:
 ```
-black .
-mypy
-pytest
-ruff check quotes2
+uv run ruff format
+uv run ruff check
+uv run pytest
+uv run ty check
 ```
