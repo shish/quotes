@@ -5,6 +5,7 @@ from typing import List, Tuple
 
 import click
 import sqlalchemy
+import sqlalchemy.event
 from flask import (
     Flask,
     abort,
