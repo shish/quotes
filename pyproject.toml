@@ -14,10 +14,10 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "black",
     "ruff",
     "ty",
     "pytest-cov",
+    "prek>=0.4.6",
 ]
 
 [tool.setuptools]
