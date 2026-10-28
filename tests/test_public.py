@@ -1,5 +1,6 @@
-from flask.testing import FlaskClient
 import datetime
+
+from flask.testing import FlaskClient
 
 
 def test_favicon(client: FlaskClient):

@@ -1,5 +1,4 @@
 import datetime
-from typing import List
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -27,9 +26,11 @@ class Quote(db.Model):  # type: ignore
         nullable=False, default=db.func.now()
     )
 
-    tags: Mapped[List["Tag"]] = relationship(secondary=map_ttq, back_populates="quotes")
+    tags: Mapped[list[Tag]] = relationship(secondary=map_ttq, back_populates="quotes")
 
-    def __init__(self, text: str, tags: List["Tag"] = []):
+    def __init__(self, text: str, tags: list[Tag] | None = None):
+        if tags is None:
+            tags = []
         self.text = text
         self.tags = tags
 
@@ -44,7 +45,7 @@ class Tag(db.Model):  # type: ignore
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(index=True, nullable=False)
 
-    quotes: Mapped[List[Quote]] = relationship(secondary=map_ttq, back_populates="tags")
+    quotes: Mapped[list[Quote]] = relationship(secondary=map_ttq, back_populates="tags")
 
     def __init__(self, name: str):
         self.name = name

@@ -1,7 +1,6 @@
 import datetime
 import math
 import os
-from typing import List, Tuple
 
 import click
 import sqlalchemy
@@ -27,7 +26,7 @@ def get_tag(name: str) -> Tag:
     return Tag.query.filter(Tag.name == name).first() or Tag(name.lower())
 
 
-def tag_cloud() -> List[Tuple[str, float]]:
+def tag_cloud() -> list[tuple[str, float]]:
     """Return a list of all tags and their logaritmic count."""
     return [
         (a, b)
@@ -87,7 +86,7 @@ def create_app(test_config=None):
         @sqlalchemy.event.listens_for(db.engine, "connect")
         def on_connect(dbapi_connection, connection_record):
             dbapi_connection.create_function("greatest", 2, lambda a, b: max(a, b))
-            dbapi_connection.create_function("log", 1, lambda a: math.log(a, 10))
+            dbapi_connection.create_function("log", 1, lambda a: math.log10(a))
 
     ###################################################################
     # Public routes
@@ -132,7 +131,7 @@ def create_app(test_config=None):
     def quotes_post() -> Response:
         """Create a new quote"""
         text = request.form["text"]
-        tags = list(set(get_tag(tag) for tag in request.form["tags"].split()))
+        tags = list({get_tag(tag) for tag in request.form["tags"].split()})
         if (
             "[url=" in text
             or "<a href=" in text
@@ -151,7 +150,7 @@ def create_app(test_config=None):
         quote = db.first_or_404(select(Quote).filter(Quote.id == id))
         return render_template(
             "quote.html",
-            title="Quote #%d" % quote.id,
+            title=f"Quote #{quote.id}",
             edit=request.args.get("edit", False),
             quote=quote,
         )
@@ -162,7 +161,7 @@ def create_app(test_config=None):
         quote = db.first_or_404(select(Quote).where(Quote.id == id))
         if request.form["text"]:
             quote.text = request.form["text"]
-            quote.tags = list(set(get_tag(tag) for tag in request.form["tags"].split()))
+            quote.tags = list({get_tag(tag) for tag in request.form["tags"].split()})
             db.session.commit()
             app.logger.info(f"Quote #{quote.id} updated")
             return redirect(url_for("quote_get", id=id))
